@@ -19,6 +19,11 @@ const client = new MongoClient(uri, {
 });
 async function run() {
     try {
+      const serviceCollection = client.db('ServicePortal').collection('Services');
+      app.get('/service-section',async (req, res)=>{
+        const services = await serviceCollection.find().limit(6).toArray();
+        res.send(services);
+      })
       // Connect the client to the server	(optional starting in v4.7)
       await client.connect();
       // Send a ping to confirm a successful connection
