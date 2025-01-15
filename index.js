@@ -20,9 +20,15 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
       const serviceCollection = client.db('ServicePortal').collection('Services');
+      //Home page Service APIs
       app.get('/service-section',async (req, res)=>{
         const services = await serviceCollection.find().limit(6).toArray();
         res.send(services);
+      })
+      //All services apis
+      app.get('/all-services', async(req, res)=>{
+        const result = await serviceCollection.find().toArray();
+        res.send(result);
       })
       // Connect the client to the server	(optional starting in v4.7)
       await client.connect();
