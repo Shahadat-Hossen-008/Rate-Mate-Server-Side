@@ -20,6 +20,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
       const serviceCollection = client.db('ServicePortal').collection('Services');
+      const allReviews = client.db('ServicePortal').collection('Reviews')
       //Home page Service APIs
       app.get('/service-section',async (req, res)=>{
         const services = await serviceCollection.find().limit(6).toArray();
@@ -35,6 +36,17 @@ async function run() {
         const id = req.params.id;
         const query = {_id: new ObjectId(id)};
         const result = await serviceCollection.findOne(query);
+        res.send(result);
+      })
+      //get all review
+      app.get('/all-review', async(req, res)=>{
+        const result = await allReviews.find().toArray();
+        res.send(result);
+      })
+      //Reviews apis
+      app.post('/all-reviews', async(req, res)=>{
+        const reviewPost = req.body;
+        const result = await allReviews.insertOne(reviewPost);
         res.send(result);
       })
       // Connect the client to the server	(optional starting in v4.7)
