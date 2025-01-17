@@ -38,6 +38,12 @@ async function run() {
         const result = await serviceCollection.findOne(query);
         res.send(result);
       })
+      //add service to apis
+      app.post("/add-services", async(req, res)=>{
+        const service = req.body;
+        const result = await serviceCollection.insertOne(service);
+        res.send(result);
+      })
       //get all review
       app.get('/all-review', async(req, res)=>{
         const result = await allReviews.find().toArray();
