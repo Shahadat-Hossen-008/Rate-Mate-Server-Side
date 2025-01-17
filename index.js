@@ -38,11 +38,25 @@ async function run() {
         const result = await serviceCollection.findOne(query);
         res.send(result);
       })
+      //get specific user services apis
+      app.get('/all-service/:email', async(req, res)=>{ //after all-services slash id and email are same thats why before emails or id all-services must be change
+        const email = req.params.email;
+        const query = { user_email : email}
+        const result = await serviceCollection.find(query).toArray();
+        res.send(result)
+      })
       //add service to apis
       app.post("/add-services", async(req, res)=>{
         const service = req.body;
         const result = await serviceCollection.insertOne(service);
         res.send(result);
+      })
+      //delete service apis
+      app.delete('/all-service/:id',async (req, res) => {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await  serviceCollection.deleteOne(query);
+        res.send(result)
       })
       //get all review
       app.get('/all-review', async(req, res)=>{
