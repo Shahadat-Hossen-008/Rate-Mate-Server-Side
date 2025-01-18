@@ -58,6 +58,18 @@ async function run() {
         const result = await  serviceCollection.deleteOne(query);
         res.send(result)
       })
+      //update service apis
+      app.put('/update-service/:id', async(req, res)=>{
+        const id = req.params.id;
+        const serviceData = req.body;
+        const updateService={
+          $set: serviceData
+        }
+        const query = {_id : new ObjectId(id)};
+        const options = {upsert: true};
+        const result = await serviceCollection.updateOne( query, updateService, options)
+        res.send(result);
+      })
       //get all review
       app.get('/all-review', async(req, res)=>{
         const result = await allReviews.find().toArray();
@@ -69,6 +81,7 @@ async function run() {
         const result = await allReviews.insertOne(reviewPost);
         res.send(result);
       })
+      
       // Connect the client to the server	(optional starting in v4.7)
       await client.connect();
       // Send a ping to confirm a successful connection
