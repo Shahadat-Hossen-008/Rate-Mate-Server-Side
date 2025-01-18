@@ -75,13 +75,39 @@ async function run() {
         const result = await allReviews.find().toArray();
         res.send(result);
       })
+      //get specific user Reviews apis
+      app.get('/all-review/:email', async(req, res)=>{ 
+        const email = req.params.email;
+        const query = { user_Email : email};
+        const result = await allReviews.find(query).toArray();
+        res.send(result)
+      })
       //Reviews apis
       app.post('/all-reviews', async(req, res)=>{
         const reviewPost = req.body;
         const result = await allReviews.insertOne(reviewPost);
         res.send(result);
       })
+       //update review apis
+       app.put('/update-review/:id', async(req, res)=>{
+        const id = req.params.id;
+        const reviewData = req.body;
+        const updateReview={
+          $set: reviewData
+        }
+        const query = {_id : new ObjectId(id)};
+        const options = {upsert: true};
+        const result = await allReviews.updateOne(query, updateReview, options)
+        res.send(result);
+      })
       
+      //Delete review apis
+      app.delete('/all-review/:id',async (req, res) => {
+        const id = req.params.id;
+        const query = {_id : new ObjectId(id)}
+        const result = await  allReviews.deleteOne(query);
+        res.send(result)
+      })
       // Connect the client to the server	(optional starting in v4.7)
       await client.connect();
       // Send a ping to confirm a successful connection
