@@ -45,6 +45,26 @@ async function run() {
         const result = await serviceCollection.find(query).toArray();
         res.send(result)
       })
+      //filter functionalities
+      app.get('/allService', async (req, res)=>{
+        const  filter  = req.query.filter;
+        let option={}
+        if(filter)option.category = filter
+        const result = await serviceCollection.find(option).toArray()
+        res.send(result)
+      })
+      //search functionalities reviews
+      app.get('/all-service', async (req, res)=>{
+        const { searchParams } = req.query;
+        let option={}
+        if(searchParams){
+          option = {
+            serviceTitle:{$regex: searchParams, $options:'i'}
+          };
+        } 
+        const result = await serviceCollection.find(option).toArray()
+        res.send(result)
+      })
       //add service to apis
       app.post("/add-services", async(req, res)=>{
         const service = req.body;
@@ -74,6 +94,18 @@ async function run() {
       app.get('/all-review', async(req, res)=>{
         const result = await allReviews.find().toArray();
         res.send(result);
+      })
+      //search functionalities reviews
+      app.get('/all-reviews', async (req, res)=>{
+        const { searchParams } = req.query;
+        let option={}
+        if(searchParams){
+          option = {
+            serviceTitle:{$regex: searchParams, $options:'i'}
+          };
+        } 
+        const result = await allReviews.find(option).toArray()
+        res.send(result)
       })
       //get specific user Reviews apis
       app.get('/all-review/:email', async(req, res)=>{ 
