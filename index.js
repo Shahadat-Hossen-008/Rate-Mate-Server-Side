@@ -65,6 +65,11 @@ async function run() {
         const result = await serviceCollection.find(option).toArray()
         res.send(result)
       })
+      //number of service
+      app.get('/serviceCount', async(req, res)=>{
+        const count = await serviceCollection.estimatedDocumentCount();
+        res.send({count})
+      })
       //add service to apis
       app.post("/add-services", async(req, res)=>{
         const service = req.body;
@@ -113,6 +118,11 @@ async function run() {
         const query = { user_Email : email};
         const result = await allReviews.find(query).toArray();
         res.send(result)
+      })
+      //number of service
+      app.get('/reviewCount', async(req, res)=>{
+        const count = await allReviews.estimatedDocumentCount()
+        res.send({count})
       })
       //Reviews apis
       app.post('/all-reviews', async(req, res)=>{
